@@ -1,0 +1,8 @@
+.DS_Store
+**/__pycache__/
+*.py[cod]
+**/vector_store*/
+**/*_vector_store/
+**/*_demo_store/
+**/~$*
+*.log
