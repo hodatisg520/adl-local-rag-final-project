@@ -11,6 +11,8 @@ This repository contains the starter code and ongoing work for a local Retrieval
 - `sample_code/TASK1_PDF_SUPPORT.md` — Task 1 implementation notes and verified demo command.
 - `sample_code/evaluate_handbook.py` — repeatable question set for the selected CS handbook.
 - `sample_code/TASK2_EVALUATION.md` — Task 2 evaluation and failure analysis.
+- `docker/` — Task 3 Docker image and deployment instructions.
+- `docker-compose.yml` — chatbot container configuration and persistent index volume.
 
 Generated Chroma indexes, Python cache files, macOS metadata, and temporary Word lock files are excluded from version control.
 
@@ -55,6 +57,10 @@ python run_txt.py \
 
 Enter `quit` or `exit` to close the chat. The chatbot shows the source PDF and page for retrieved passages. See `sample_code/TASK2_EVALUATION.md` for the questions, model comparison, observed failures, and inconsistencies in the handbook.
 
+## Task 3: Docker deployment
+
+The Python RAG application is packaged as a Docker image. It connects to Ollama running on the host Mac, where Ollama can use the machine's Apple GPU. The Compose configuration mounts the selected handbook read-only and keeps the Chroma index in a persistent Docker volume. See [`docker/README.md`](docker/README.md) for setup, build, run, re-index, and cleanup instructions.
+
 ## Task 1: PDF support
 
 The application extracts selectable text page by page from PDFs, splits it into chunks, embeds those chunks, and indexes them in Chroma. Retrieved PDF sources include page numbers. Scanned PDFs containing only images require OCR, which is outside the current implementation.
@@ -78,4 +84,5 @@ When documents change, add `--rebuild-index` so the saved index is refreshed.
 
 - Task 1: PDF ingestion and retrieval implemented and demonstrated.
 - Task 2: CS handbook chatbot implemented, evaluated, and documented.
-- Tasks 3–7: work in progress.
+- Task 3: Docker image and Compose deployment implemented and verified locally.
+- Tasks 4–7: work in progress.

@@ -1,0 +1,11 @@
+.git
+.DS_Store
+**/__pycache__/
+**/*.py[cod]
+**/vector_store*/
+**/*_vector_store/
+sample_code/data_txt/
+sample_code/major_handbook_pdfs/
+Final-project-ADL*.pdf
+Final-project-ADL*.pptx
+work/

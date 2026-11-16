@@ -10,6 +10,7 @@ Usage: python run_txt.py
 
 # IMPORT LIBRARIES
 import argparse
+import os
 import shutil
 from pathlib import Path
 from typing import Dict, Any
@@ -29,7 +30,9 @@ CHUNK_OVERLAP = 200 # Number of characters shared between nearby chunks.
 EMBED_MODEL = "nomic-embed-text" # Ollama embedding model used to convert text to vectors (Remember to pull the embedding model by running the command: ollama pull nomic-embed-text)
 LLM_MODEL = "qwen2.5:1.5b" # Local default selected after handbook evaluation; override with --llm-model.
 TEMPERATURE = 0.0 # Use deterministic answers for handbook question answering.
-OLLAMA_URL = "http://127.0.0.1:11434" # URL of local (127.0.0.1) Ollama server. Its default port is 11434
+OLLAMA_URL = os.environ.get(
+    "OLLAMA_URL", "http://127.0.0.1:11434"
+) # Override this when the app runs in Docker.
 TOP_K = 5 # Number of top-matched chunks to retrieve.
 SCORE_THRESHOLD = 0.3 # Minimum average relevance score before trusting retrieved context.
 SAMPLE_QUESTION = "How many students are there at Fulbright?" # Default question if user does not pass --question.

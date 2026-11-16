@@ -6,3 +6,4 @@
 **/*_demo_store/
 **/~$*
 *.log
+.env

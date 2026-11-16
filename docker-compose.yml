@@ -1,0 +1,25 @@
+services:
+  chatbot:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    image: adl-local-rag:task3
+    init: true
+    stdin_open: true
+    tty: true
+    environment:
+      OLLAMA_URL: ${OLLAMA_URL:-http://host.docker.internal:11434}
+    volumes:
+      - ./sample_code/major_handbook_pdfs/CS_MajorHandbook.pdf:/app/major_handbook_pdfs/CS_MajorHandbook.pdf:ro
+      - rag_index:/app/data_txt
+    command:
+      - --data-dir
+      - major_handbook_pdfs/CS_MajorHandbook.pdf
+      - --vector-store
+      - data_txt/cs_handbook_vector_store
+      - --llm-model
+      - qwen2.5:1.5b
+      - --interactive
+
+volumes:
+  rag_index:
