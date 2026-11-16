@@ -15,6 +15,9 @@ This repository contains the starter code and ongoing work for a local Retrieval
 - `docker-compose.yml` — chatbot container configuration and persistent index volume.
 - `sample_code/streamlit_app.py` — browser-based chat interface for Task 4.
 - `sample_code/TASK4_UI.md` — Task 4 usage and UI verification notes.
+- `report/final_project_report.pdf` — Task 5 final report.
+- `report/final_project_report.md` — editable report source.
+- `report/build_report.py` — script for rebuilding the report PDF with ReportLab.
 
 Generated Chroma indexes, Python cache files, macOS metadata, and temporary Word lock files are excluded from version control.
 
@@ -67,6 +70,10 @@ The Python RAG application is packaged as a Docker image. It connects to Ollama 
 
 The Streamlit interface supports question input, browser-session conversation history, source pages, and a clear-chat control. Start it with `docker-compose up --build web`, then open `http://localhost:8501`. See [`sample_code/TASK4_UI.md`](sample_code/TASK4_UI.md) for screenshots, local setup, and verification details.
 
+## Task 5: Final report
+
+The 1,500-word minimum report is available as [`report/final_project_report.pdf`](report/final_project_report.pdf), with an editable Markdown source and a ReportLab build script alongside it. Rebuild it by installing `report/requirements.txt`, then running `python report/build_report.py`.
+
 ## Task 1: PDF support
 
 The application extracts selectable text page by page from PDFs, splits it into chunks, embeds those chunks, and indexes them in Chroma. Retrieved PDF sources include page numbers. Scanned PDFs containing only images require OCR, which is outside the current implementation.
@@ -92,4 +99,5 @@ When documents change, add `--rebuild-index` so the saved index is refreshed.
 - Task 2: CS handbook chatbot implemented, evaluated, and documented.
 - Task 3: Docker image and Compose deployment implemented and verified locally.
 - Task 4: Streamlit web interface implemented, tested with two handbook questions, and documented with a browser screenshot.
-- Tasks 5–7: work in progress.
+- Task 5: final report written and exported as a PDF.
+- Tasks 6–7: work in progress.
