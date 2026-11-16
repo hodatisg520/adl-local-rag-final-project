@@ -1,0 +1,10 @@
+Task 2: CS handbook chatbot
+Narration language: English
+
+Scene 1: Task 2 narrows the knowledge base to the nineteen-page Computer Science major handbook. This prevents answers from mixing requirements across different majors.
+
+Scene 2: The question pipeline embeds a query, retrieves five handbook passages, and asks Qwen 2.5 1.5B to answer only from that evidence. The prompt asks it to preserve qualifications and say when the handbook is silent.
+
+Scene 3: We manually reviewed thirteen questions for each model. The 1.5B model was fully correct on eight questions, compared with four for the 0.5B model. Both models still had one incomplete response and one source-conflict case.
+
+Scene 4: The remaining errors show two different problems: retrieval can select the wrong section, while generation can misread or omit a qualification. Page citations help a user check the answer; they do not guarantee correctness.

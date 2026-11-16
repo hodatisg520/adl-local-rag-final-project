@@ -1,0 +1,10 @@
+Task 4: Browser-based chatbot
+Narration language: English
+
+Scene 1: Task 4 gives students a browser interface to the same RAG backend. It accepts a question, keeps a session history, and provides a clear-chat control.
+
+Scene 2: Streamlit passes each question to the shared ask function. The answer is shown with an expandable source panel containing PDF pages and retrieval scores.
+
+Scene 3: In the browser check, the CS 311 prerequisite question returned CS 313 with a page eighteen source. The declaration question returned the two-course requirement and noted that MATH 202 counts.
+
+Scene 4: The second answer displayed three retrieved source passages from pages seven, seven, and four. Compose exposes the interface on localhost port 8501, and the conversation history and clear button were also verified.

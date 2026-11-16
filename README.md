@@ -18,6 +18,7 @@ This repository contains the starter code and ongoing work for a local Retrieval
 - `report/final_project_report.pdf` — Task 5 final report.
 - `report/final_project_report.md` — editable report source.
 - `report/build_report.py` — script for rebuilding the report PDF with ReportLab.
+- `demo_video/` — four narrated Task 6 walkthrough videos, transcripts, and rebuild instructions.
 
 Generated Chroma indexes, Python cache files, macOS metadata, and temporary Word lock files are excluded from version control.
 
@@ -74,6 +75,17 @@ The Streamlit interface supports question input, browser-session conversation hi
 
 The 1,500-word minimum report is available as [`report/final_project_report.pdf`](report/final_project_report.pdf), with an editable Markdown source and a ReportLab build script alongside it. Rebuild it by installing `report/requirements.txt`, then running `python report/build_report.py`.
 
+## Task 6: Video demos
+
+Four separate 1080p videos cover Tasks 1–4. Each walkthrough explains the task purpose, shows implementation excerpts, and presents verified results. The videos have English narration and matching transcripts; Task 4 also includes a screenshot from the verified browser interface.
+
+- [Task 1 — PDF support](demo_video/task1_pdf_support.mp4) · [transcript](demo_video/task1_pdf_support_transcript.txt)
+- [Task 2 — handbook chatbot](demo_video/task2_handbook_chatbot.mp4) · [transcript](demo_video/task2_handbook_chatbot_transcript.txt)
+- [Task 3 — Docker deployment](demo_video/task3_docker_deployment.mp4) · [transcript](demo_video/task3_docker_deployment_transcript.txt)
+- [Task 4 — web interface](demo_video/task4_web_interface.mp4) · [transcript](demo_video/task4_web_interface_transcript.txt)
+
+See [`demo_video/README.md`](demo_video/README.md) for video details and regeneration instructions.
+
 ## Task 1: PDF support
 
 The application extracts selectable text page by page from PDFs, splits it into chunks, embeds those chunks, and indexes them in Chroma. Retrieved PDF sources include page numbers. Scanned PDFs containing only images require OCR, which is outside the current implementation.
@@ -100,4 +112,5 @@ When documents change, add `--rebuild-index` so the saved index is refreshed.
 - Task 3: Docker image and Compose deployment implemented and verified locally.
 - Task 4: Streamlit web interface implemented, tested with two handbook questions, and documented with a browser screenshot.
 - Task 5: final report written and exported as a PDF.
-- Tasks 6–7: work in progress.
+- Task 6: four narrated walkthrough videos created for Tasks 1–4.
+- Task 7: repository README and packaging review remain to be completed.
