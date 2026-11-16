@@ -10,7 +10,7 @@ Run these commands from the `sample_code` folder. Install the project requiremen
 pip install -r requirements.txt
 ollama serve
 ollama pull nomic-embed-text
-ollama pull qwen2.5:0.5b
+ollama pull qwen2.5:1.5b
 ```
 
 Keep Ollama running while you run the chatbot.

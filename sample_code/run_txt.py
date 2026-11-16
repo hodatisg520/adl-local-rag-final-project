@@ -27,8 +27,8 @@ COLLECTION = "rag_documents" # Name of the Chroma collection.
 CHUNK_SIZE = 1000 # Maximum characters per text chunk.
 CHUNK_OVERLAP = 200 # Number of characters shared between nearby chunks.
 EMBED_MODEL = "nomic-embed-text" # Ollama embedding model used to convert text to vectors (Remember to pull the embedding model by running the command: ollama pull nomic-embed-text)
-LLM_MODEL = "qwen2.5:0.5b" # Ollama model name for generating answers (Remember to pull the LLM model by running the command: ollama pull qwen2.5:0.5b).
-TEMPERATURE = 0.7 # Controls how random or creative the model response is (the higher, the more creative; 0.0: deterministic).
+LLM_MODEL = "qwen2.5:1.5b" # Local default selected after handbook evaluation; override with --llm-model.
+TEMPERATURE = 0.0 # Use deterministic answers for handbook question answering.
 OLLAMA_URL = "http://127.0.0.1:11434" # URL of local (127.0.0.1) Ollama server. Its default port is 11434
 TOP_K = 5 # Number of top-matched chunks to retrieve.
 SCORE_THRESHOLD = 0.3 # Minimum average relevance score before trusting retrieved context.
@@ -37,30 +37,30 @@ SAMPLE_QUESTION = "How many students are there at Fulbright?" # Default question
 # FINAL PROMPT SENT TO THE MODEL: Replacing {context} and {question} with the actual values.
 # Without this instruction, the model might rely entirely on its pretrained knowledge.
 # {context} is a variable that will be replaced by retrieved chunks from the vector database.
-# 1. If the retrieved documents contain the answer, use them.
-# 2. If the vector database does not contain the answer, use the model’s own knowledge.
-# 3. Keep answers short.
-# 4. This is a useful RAG trick. It helps distinguish: Answer from retrieved documents vs. Answer from model knowledge. Note: some small models might not understand this trick.
-# Answer from retrieved documents
-PROMPT_TEMPLATE = """You are a helpful AI assistant that answers questions based on provided documents.
+# Prompt design for handbook answers: keep answers grounded and traceable.
+PROMPT_TEMPLATE = """You are a helpful assistant for the selected major handbook.
 
-CONTEXT FROM DOCUMENTS:
+Use only the information in the context below. Do not fill gaps with general
+knowledge. If the context does not answer the question, say that you could not
+find the answer in the handbook. Preserve qualifications and conditions, and
+cite the source page when it is available.
+
+CONTEXT FROM THE HANDBOOK:
 {context}
 ---
 QUESTION: {question}
-
-INSTRUCTIONS:
-1. If the context contains relevant information, answer based on that.
-2. If the context is insufficient, use your general knowledge.
-3. Be concise - 2-4 sentences unless more detail is needed.
 
 ANSWER:"""
 
 # FIND SUPPORTED DOCUMENTS IN A FOLDER
 def find_document_files(directory: str):
     folder = Path(directory)
+    if folder.is_file():
+        if folder.suffix.lower() not in {".txt", ".pdf"}:
+            raise ValueError("The selected document must be a .txt or .pdf file.")
+        return [folder]
     if not folder.is_dir():
-        raise FileNotFoundError("Document folder not found: " + str(folder))
+        raise FileNotFoundError("Document folder or file not found: " + str(folder))
 
     # Search only the top level so files inside the vector store are ignored.
     return sorted(
@@ -192,8 +192,11 @@ def ask(question: str, db: Chroma, llm: OllamaLLM) -> Dict[str, Any]:
     used_fallback = not sources or avg_score < SCORE_THRESHOLD
     # Fallback branch: retrieval is not good enough.
     if used_fallback:
-        # Tell model to use general knowledge.
-        context = "No sufficiently relevant documents found. Use your general knowledge."
+        # Avoid answering from pretraining when retrieval is weak.
+        context = (
+            "No sufficiently relevant handbook passages were retrieved. "
+            "If the answer is not in the context, say it could not be found."
+        )
     # Retrieval branch: build context from matched chunks.
     else:
         # Join chunks with separators for readability.
@@ -210,6 +213,22 @@ def ask(question: str, db: Chroma, llm: OllamaLLM) -> Dict[str, Any]:
     # Return answer, evidence sources, and fallback status.
     return {'answer': answer, 'sources': sources, 'used_fallback': used_fallback}
 
+def print_result(question: str, result: Dict[str, Any]):
+    print("Q: " + question)
+    print("\nA: " + result['answer'] + "\n")
+    if result['used_fallback']:
+        print("(no sufficiently relevant handbook passages were retrieved)")
+    else:
+        print("Sources:")
+        for source in result['sources'][:3]:
+            page_label = ""
+            if source.get('page') is not None:
+                page_label = "  page=" + str(source['page'])
+            print(
+                "   " + str(source['source']) + page_label
+                + "  score=" + str(source['score'])
+            )
+
 # MAIN FUNCTION
 def main():
     parser = argparse.ArgumentParser(
@@ -218,7 +237,7 @@ def main():
     parser.add_argument('--question', '-q', default=SAMPLE_QUESTION, help='Question to ask')
     parser.add_argument(
         '--data-dir', default=DATA_DIR,
-        help='Folder containing .txt and .pdf documents (default: data_txt)'
+        help='Folder of .txt/.pdf files or one .txt/.pdf file (default: data_txt)'
     )
     parser.add_argument(
         '--vector-store', default=VECTOR_STORE,
@@ -227,6 +246,14 @@ def main():
     parser.add_argument(
         '--rebuild-index', action='store_true',
         help='Recreate the index to include newly added or changed documents'
+    )
+    parser.add_argument(
+        '--llm-model', default=LLM_MODEL,
+        help='Ollama model for answer generation (default: qwen2.5:1.5b)'
+    )
+    parser.add_argument(
+        '--interactive', action='store_true',
+        help='Keep asking handbook questions until you enter quit or exit'
     )
     args = parser.parse_args()
 
@@ -245,33 +272,26 @@ def main():
     except (FileNotFoundError, ValueError) as error:
         parser.error(str(error))
     # Show which LLM is being used.
-    print("Connecting to Ollama (" + LLM_MODEL + ")...")
+    print("Connecting to Ollama (" + args.llm_model + ")...")
     # Initialize Ollama LLM client.
-    llm = OllamaLLM(model=LLM_MODEL, base_url=OLLAMA_URL, temperature=TEMPERATURE)
+    llm = OllamaLLM(model=args.llm_model, base_url=OLLAMA_URL, temperature=TEMPERATURE)
 
-    # Print user question.
-    print("Q: " + args.question)
-    # Get answer from RAG pipeline.
-    result = ask(args.question, db, llm)
-    # Print answer text.
-    print("\nA: " + result['answer'] + "\n")
-    # If fallback happened, show note.
-    if result['used_fallback']:
-        # Fallback note for transparency.
-        print("(answered from model knowledge — no relevant documents found)")
-    # If retrieval was relevant, show top sources.
+    if args.interactive:
+        print("Handbook chatbot ready. Enter 'quit' or 'exit' to stop.")
+        while True:
+            try:
+                question = input("\nYou: ").strip()
+            except (EOFError, KeyboardInterrupt):
+                print("\nGoodbye.")
+                break
+            if question.lower() in {"quit", "exit"}:
+                print("Goodbye.")
+                break
+            if not question:
+                continue
+            print_result(question, ask(question, db, llm))
     else:
-        # # Show first 3 sources
-        print("Sources:")
-        for s in result['sources'][:3]:
-            # Print source file, PDF page (when available), and similarity score.
-            page_label = ""
-            if s.get('page') is not None:
-                page_label = "  page=" + str(s['page'])
-            print(
-                "   " + str(s['source']) + page_label
-                + "  score=" + str(s['score'])
-            )
+        print_result(args.question, ask(args.question, db, llm))
 
 # RUN PROGRAM IF THIS FILE IS EXECUTED DIRECTLY.
 if __name__ == "__main__":

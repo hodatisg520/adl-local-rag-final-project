@@ -9,6 +9,8 @@ This repository contains the starter code and ongoing work for a local Retrieval
 - `sample_code/data_txt/` — sample TXT knowledge-base documents.
 - `sample_code/major_handbook_pdfs/` — course-provided major handbooks for Task 2.
 - `sample_code/TASK1_PDF_SUPPORT.md` — Task 1 implementation notes and verified demo command.
+- `sample_code/evaluate_handbook.py` — repeatable question set for the selected CS handbook.
+- `sample_code/TASK2_EVALUATION.md` — Task 2 evaluation and failure analysis.
 
 Generated Chroma indexes, Python cache files, macOS metadata, and temporary Word lock files are excluded from version control.
 
@@ -22,6 +24,7 @@ conda activate rag
 pip install -r requirements.txt
 ollama pull nomic-embed-text
 ollama pull qwen2.5:0.5b
+ollama pull qwen2.5:1.5b
 ollama serve
 ```
 
@@ -35,6 +38,22 @@ python run_txt.py --question "How many students are there at Fulbright?"
 ```
 
 The default knowledge base is `sample_code/data_txt/`. You can point the application at another folder containing `.txt` and/or `.pdf` files with `--data-dir`.
+
+## Task 2: CS major handbook chatbot
+
+The selected handbook is `sample_code/major_handbook_pdfs/CS_MajorHandbook.pdf`. Start an interactive chatbot grounded in that single handbook with:
+
+```bash
+cd sample_code
+python run_txt.py \
+  --data-dir major_handbook_pdfs/CS_MajorHandbook.pdf \
+  --vector-store data_txt/cs_handbook_vector_store \
+  --rebuild-index \
+  --llm-model qwen2.5:1.5b \
+  --interactive
+```
+
+Enter `quit` or `exit` to close the chat. The chatbot shows the source PDF and page for retrieved passages. See `sample_code/TASK2_EVALUATION.md` for the questions, model comparison, observed failures, and inconsistencies in the handbook.
 
 ## Task 1: PDF support
 
@@ -58,4 +77,5 @@ When documents change, add `--rebuild-index` so the saved index is refreshed.
 ## Progress
 
 - Task 1: PDF ingestion and retrieval implemented and demonstrated.
-- Tasks 2–7: work in progress.
+- Task 2: CS handbook chatbot implemented, evaluated, and documented.
+- Tasks 3–7: work in progress.
