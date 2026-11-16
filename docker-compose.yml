@@ -21,5 +21,26 @@ services:
       - qwen2.5:1.5b
       - --interactive
 
+  web:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    image: adl-local-rag:task3
+    init: true
+    ports:
+      - "127.0.0.1:8501:8501"
+    environment:
+      OLLAMA_URL: ${OLLAMA_URL:-http://host.docker.internal:11434}
+    volumes:
+      - ./sample_code/major_handbook_pdfs/CS_MajorHandbook.pdf:/app/major_handbook_pdfs/CS_MajorHandbook.pdf:ro
+      - rag_index:/app/data_txt
+    entrypoint:
+      - streamlit
+      - run
+      - /app/streamlit_app.py
+      - --server.address=0.0.0.0
+      - --server.port=8501
+      - --server.headless=true
+
 volumes:
   rag_index:

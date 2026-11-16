@@ -10,6 +10,7 @@ COPY sample_code/requirements-docker.txt /tmp/requirements-docker.txt
 RUN python -m pip install --no-cache-dir -r /tmp/requirements-docker.txt
 
 COPY sample_code/run_txt.py /app/run_txt.py
+COPY sample_code/streamlit_app.py /app/streamlit_app.py
 RUN mkdir -p /app/data_txt /app/major_handbook_pdfs
 
 ENTRYPOINT ["python", "/app/run_txt.py"]

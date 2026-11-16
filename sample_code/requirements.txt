@@ -36,5 +36,5 @@ rich>=13.0.0
 # Logging & Metrics
 tqdm>=4.66.0
 
-# app 
-streamlit >=1.37.1
+# Web app
+streamlit>=1.37.1

@@ -13,6 +13,8 @@ This repository contains the starter code and ongoing work for a local Retrieval
 - `sample_code/TASK2_EVALUATION.md` — Task 2 evaluation and failure analysis.
 - `docker/` — Task 3 Docker image and deployment instructions.
 - `docker-compose.yml` — chatbot container configuration and persistent index volume.
+- `sample_code/streamlit_app.py` — browser-based chat interface for Task 4.
+- `sample_code/TASK4_UI.md` — Task 4 usage and UI verification notes.
 
 Generated Chroma indexes, Python cache files, macOS metadata, and temporary Word lock files are excluded from version control.
 
@@ -61,6 +63,10 @@ Enter `quit` or `exit` to close the chat. The chatbot shows the source PDF and p
 
 The Python RAG application is packaged as a Docker image. It connects to Ollama running on the host Mac, where Ollama can use the machine's Apple GPU. The Compose configuration mounts the selected handbook read-only and keeps the Chroma index in a persistent Docker volume. See [`docker/README.md`](docker/README.md) for setup, build, run, re-index, and cleanup instructions.
 
+## Task 4: Web chat interface
+
+The Streamlit interface supports question input, browser-session conversation history, source pages, and a clear-chat control. Start it with `docker-compose up --build web`, then open `http://localhost:8501`. See [`sample_code/TASK4_UI.md`](sample_code/TASK4_UI.md) for screenshots, local setup, and verification details.
+
 ## Task 1: PDF support
 
 The application extracts selectable text page by page from PDFs, splits it into chunks, embeds those chunks, and indexes them in Chroma. Retrieved PDF sources include page numbers. Scanned PDFs containing only images require OCR, which is outside the current implementation.
@@ -85,4 +91,5 @@ When documents change, add `--rebuild-index` so the saved index is refreshed.
 - Task 1: PDF ingestion and retrieval implemented and demonstrated.
 - Task 2: CS handbook chatbot implemented, evaluated, and documented.
 - Task 3: Docker image and Compose deployment implemented and verified locally.
-- Tasks 4–7: work in progress.
+- Task 4: Streamlit web interface implemented, tested with two handbook questions, and documented with a browser screenshot.
+- Tasks 5–7: work in progress.

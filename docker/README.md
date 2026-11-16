@@ -80,3 +80,5 @@ Verified on Apple Silicon with Colima:
 - `docker-compose config` accepted the Compose configuration and `docker-compose build` built the image successfully.
 - With a fresh volume, the container extracted the selected handbook and indexed 57 chunks.
 - A later container reused the persisted index, answered that CS 313 is the prerequisite for CS 311, and cited page 18.
+
+The same image also runs the Task 4 browser interface as the `web` service. See [`sample_code/TASK4_UI.md`](../sample_code/TASK4_UI.md) for the browser URL and UI verification notes.
