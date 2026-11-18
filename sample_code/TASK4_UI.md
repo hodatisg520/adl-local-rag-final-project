@@ -41,3 +41,5 @@ Use questions with known handbook answers, for example:
 The browser demo should show the answer, source pages, both turns in the conversation history, and the clear-chat control. The captured browser screenshot is saved in `screenshots/`.
 
 The checked-in screenshot [`task4_answer_with_sources.png`](../screenshots/task4_answer_with_sources.png) shows the declaration-requirements answer and the collapsed panel indicating three retrieved sources. In the browser session, expanding the panel showed PDF pages 7, 7, and 4; the two-question history and clear-chat control were also confirmed.
+
+The additional screenshot [`task4_two_question_history.jpg`](../screenshots/task4_two_question_history.jpg) shows both questions and answers in one session, with each answer's three-source panel and the clear-chat control visible.

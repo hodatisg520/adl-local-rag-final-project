@@ -31,7 +31,7 @@ cd adl-local-rag-final-project
 
 | Workflow | Requirements file | Additional requirements |
 | --- | --- | --- |
-| Local RAG app and evaluation | `sample_code/requirements.txt` | Python 3.10; [Ollama](https://ollama.com/download) with `nomic-embed-text` and `qwen2.5:1.5b` |
+| Local RAG app and evaluation | `sample_code/requirements.txt` | Python 3.12 (tested); [Ollama](https://ollama.com/download) with `nomic-embed-text` and `qwen2.5:1.5b` |
 | Docker app | `sample_code/requirements-docker.txt` (locked versions) | [Docker with Compose](https://docs.docker.com/compose/install/); Ollama reachable from the container |
 | Rebuild the report | `report/requirements.txt` | Python and ReportLab |
 | Rebuild the demo videos | `demo_video/requirements.txt` | macOS, FFmpeg (`ffmpeg` and `ffprobe`), and the macOS `say` command |
@@ -40,33 +40,31 @@ The Task 2 model comparison also uses `qwen2.5:0.5b`. The demo MP4 files and rep
 
 ## Local setup
 
-From the repository root, create an environment and install the application dependencies:
-
-```bash
-cd sample_code
-conda create -n rag python=3.10
-conda activate rag
-python -m pip install -r requirements.txt
-ollama pull nomic-embed-text
-ollama pull qwen2.5:1.5b
-ollama pull qwen2.5:0.5b
-```
-
-Install [Ollama](https://ollama.com/download) if needed and make sure it is running locally. If it is not already running as an application or service, start it in a terminal:
+In Terminal 1, start Ollama and leave it running. If the Ollama desktop app is already open and serving requests, skip `ollama serve`:
 
 ```bash
 ollama serve
 ```
 
-Keep the Ollama terminal open. In another terminal, from the repository root, run the sample question:
+In Terminal 2, from the repository root, create a Python virtual environment, install dependencies, and download the models. `ollama pull` requires the Ollama server to be running:
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -r sample_code/requirements.txt
+ollama pull nomic-embed-text
+ollama pull qwen2.5:1.5b
+ollama pull qwen2.5:0.5b
+```
+
+With the virtual environment still active in Terminal 2, run the sample question:
 
 ```bash
 cd sample_code
-conda activate rag
 python run_txt.py --question "How many students are there at Fulbright?"
 ```
 
-The default input folder is `sample_code/data_txt/`. Pass `--data-dir` to use another folder or PDF file. Use `--rebuild-index` after changing the input documents.
+For a new Terminal session, run `source .venv/bin/activate` from the repository root before using Python. The default input folder is `sample_code/data_txt/`. Pass `--data-dir` to use another folder or PDF file. Use `--rebuild-index` after changing the input documents.
 
 ## Task 1: PDF support
 
@@ -143,3 +141,7 @@ See [`demo_video/README.md`](demo_video/README.md) for video specifications and 
 ## Task 7: GitHub repository and README
 
 The project repository is [`hodatisg520/adl-local-rag-final-project`](https://github.com/hodatisg520/adl-local-rag-final-project). It contains the source code, dependency lists, Docker configuration, handbook and example data, report, screenshots, and video demos. The linked task notes provide implementation details and evidence for reproducing and reviewing the project.
+
+## Canvas submission package
+
+Run `python3 scripts/build_submission.py --student-id YOUR_ID --output-dir /path/to/output` to create the `ADL-YOUR_ID-project/` folder with `source_code/`, `docker/`, `report/`, and `demo_video/`. The script leaves `demo_video/` without MP4 files for your own recorded demos. After putting your four videos in a separate directory, rerun the command with `--videos-dir /path/to/your/videos --force`; it will create the matching ZIP file. The package copies the source files and report while excluding generated indexes, caches, and Git history. Add the repository URL to your Canvas submission comment.

@@ -4,16 +4,20 @@ The RAG sample now reads `.txt` and `.pdf` files from one folder. PDF text is ex
 
 ## Run it
 
-Run these commands from the `sample_code` folder. Install the project requirements, then start Ollama and download the configured models:
+Follow the virtual-environment setup in the repository README. Start Ollama in Terminal 1 (or open its desktop app), then leave it running:
 
 ```bash
-pip install -r requirements.txt
 ollama serve
+```
+
+In Terminal 2, with the virtual environment activated, download the models:
+
+```bash
 ollama pull nomic-embed-text
 ollama pull qwen2.5:1.5b
 ```
 
-Keep Ollama running while you run the chatbot.
+Keep Ollama running while you run the chatbot. Run the command below from the `sample_code` folder.
 
 To index PDFs in the project folder and ask a question covered by the supplied assignment PDFs:
 
