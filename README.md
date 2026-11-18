@@ -12,7 +12,7 @@ This repository contains a local Retrieval-Augmented Generation (RAG) chatbot bu
 | `sample_code/major_handbook_pdfs/` | Course-provided major handbooks, including the selected CS handbook |
 | `docker/`, `docker-compose.yml` | Container build and CLI/web deployment configuration; Docker's locked Python dependencies are in `sample_code/requirements-docker.txt` |
 | `report/` | Final report PDF, editable source, and build script |
-| `demo_video/` | Four Task 1–4 demo videos, transcripts, and rebuild instructions |
+| `demo_video/` | User-recorded combined demo currently covering Tasks 1–4 |
 | `screenshots/` | Verified Task 4 interface screenshot |
 | `Final-project-ADL*.pdf` | Assignment documents used as Task 1 sample PDFs |
 
@@ -34,9 +34,8 @@ cd adl-local-rag-final-project
 | Local RAG app and evaluation | `sample_code/requirements.txt` | Python 3.12 (tested); [Ollama](https://ollama.com/download) with `nomic-embed-text` and `qwen2.5:1.5b` |
 | Docker app | `sample_code/requirements-docker.txt` (locked versions) | [Docker with Compose](https://docs.docker.com/compose/install/); Ollama reachable from the container |
 | Rebuild the report | `report/requirements.txt` | Python and ReportLab |
-| Rebuild the demo videos | `demo_video/requirements.txt` | macOS, FFmpeg (`ffmpeg` and `ffprobe`), and the macOS `say` command |
 
-The Task 2 model comparison also uses `qwen2.5:0.5b`. The demo MP4 files and report PDF are already included, so their build-only dependencies are needed only when regenerating them.
+The Task 2 model comparison also uses `qwen2.5:0.5b`. The report PDF and the current user-recorded demo MP4 are already included.
 
 ## Local setup
 
@@ -123,14 +122,9 @@ The report is available as [`report/final_project_report.pdf`](report/final_proj
 
 ## Task 6: Video demos
 
-Four separate 1080p walkthrough videos cover Tasks 1–4. Each explains the task purpose, shows relevant implementation excerpts, and presents verified results. The videos have English narration and matching transcripts; Task 4 includes a screenshot from the tested browser interface.
+The user-recorded [VideoDemo.mp4](demo_video/VideoDemo.mp4) is a 3-minute-32-second, 1080p recording that shows Tasks 1–4 in one combined video. The assignment requires four separate video files, one for each task, so this combined recording still needs to be split or re-recorded as separate deliverables before final submission.
 
-- [Task 1 — PDF support](demo_video/task1_pdf_support.mp4) · [transcript](demo_video/task1_pdf_support_transcript.txt)
-- [Task 2 — handbook chatbot](demo_video/task2_handbook_chatbot.mp4) · [transcript](demo_video/task2_handbook_chatbot_transcript.txt)
-- [Task 3 — Docker deployment](demo_video/task3_docker_deployment.mp4) · [transcript](demo_video/task3_docker_deployment_transcript.txt)
-- [Task 4 — browser interface](demo_video/task4_web_interface.mp4) · [transcript](demo_video/task4_web_interface_transcript.txt)
-
-See [`demo_video/README.md`](demo_video/README.md) for video specifications and regeneration instructions.
+The submission builder expects these filenames: `task1_pdf_support.mp4`, `task2_handbook_chatbot.mp4`, `task3_docker_deployment.mp4`, and `task4_web_interface.mp4`.
 
 ## Known limitations
 
@@ -140,8 +134,8 @@ See [`demo_video/README.md`](demo_video/README.md) for video specifications and 
 
 ## Task 7: GitHub repository and README
 
-The project repository is [`hodatisg520/adl-local-rag-final-project`](https://github.com/hodatisg520/adl-local-rag-final-project). It contains the source code, dependency lists, Docker configuration, handbook and example data, report, screenshots, and video demos. The linked task notes provide implementation details and evidence for reproducing and reviewing the project.
+The project repository is [`hodatisg520/adl-local-rag-final-project`](https://github.com/hodatisg520/adl-local-rag-final-project). It contains the source code, dependency lists, Docker configuration, handbook and example data, report, screenshots, and current video demo. The linked task notes provide implementation details and evidence for reproducing and reviewing the project.
 
 ## Canvas submission package
 
-Run `python3 scripts/build_submission.py --student-id YOUR_ID --output-dir /path/to/output` to create the `ADL-YOUR_ID-project/` folder with `source_code/`, `docker/`, `report/`, and `demo_video/`. The script leaves `demo_video/` without MP4 files for your own recorded demos. After putting your four videos in a separate directory, rerun the command with `--videos-dir /path/to/your/videos --force`; it will create the matching ZIP file. The package copies the source files and report while excluding generated indexes, caches, and Git history. Add the repository URL to your Canvas submission comment.
+Run `python3 scripts/build_submission.py --student-id YOUR_ID --output-dir /path/to/output` to create the `ADL-YOUR_ID-project/` folder with `source_code/`, `docker/`, `report/`, and `demo_video/`. The script leaves the package's `demo_video/` folder empty until the four separate task videos are ready. The combined `VideoDemo.mp4` does not meet the builder's four-file requirement. After preparing the four expected filenames in a separate directory, rerun the command with `--videos-dir /path/to/your/videos --force` to create the matching ZIP file. Add the repository URL to your Canvas submission comment.
